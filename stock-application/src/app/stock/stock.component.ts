@@ -8,7 +8,7 @@ import { StockService } from './stock.service';
   styleUrls: ['./stock.component.css']
 })
 export class StockComponent implements OnInit {
-  stocks: IStock[] = [];
+  stocks: IStock;
   
 
   constructor(private stockService: StockService) { }
