@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-body">
                 <table class="table">
-                        <thead class="table-active">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>Low</th>
                                 <th>High</th>
@@ -12,8 +12,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-
+                            <tr *ngFor="let stock of stocks">
+                                <td>{{stock.low}}</td>
+                                <td>{{stock.high}}</td>
+                                <td>{{stock.close}}</td>
+                                <td>{{stock.volume}}</td>
                             </tr>
                         </tbody>
                 </table>  
