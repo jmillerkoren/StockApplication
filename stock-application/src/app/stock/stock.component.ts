@@ -16,7 +16,7 @@ export class StockComponent implements OnInit {
     low: 0,
     price: "string",
     volume: "string",
-    latestTradingDay: "string",
+    latestTradingDay: '00/00/0000',
     previousClose: "string",
     change: "string",
     changePercent: "string"
@@ -24,20 +24,22 @@ export class StockComponent implements OnInit {
 
   example: string;
 
-  constructor(private stockService: StockService) { }
-
-  ngOnInit() {
-    this.stockService.getStocks().subscribe({
-      next: result => {              
-        this.example = result["Global Quote"]["01. symbol"]; 
-        console.log(this.example); 
+  clickCompany(company: string) {
+    this.stockService.getStocks(company).subscribe({
+      next: result => {
         this.stock.company = result["Global Quote"]["01. symbol"];        
         this.stock.low = result['Global Quote']['04. low'];
         this.stock.high = result['Global Quote']['03. high'];
-        this.stock.volume = result['Global Quote']['06. volume'];            
-        console.log(this.stock.company);  
+        this.stock.volume = result['Global Quote']['06. volume'];    
+        this.stock.latestTradingDay = result['Global Quote']['07. latest trading day'];                
       }
-    });
+    });    
+  }
+
+  constructor(private stockService: StockService) { }
+
+  ngOnInit() {
+    
   }
 
 }

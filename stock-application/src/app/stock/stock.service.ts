@@ -13,8 +13,8 @@ export class StockService {
 
     }
 
-    getStocks(): Observable<any> {
-        return this.http.get<any>('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=TI4UDE5Y8XR939VH').pipe(
+    getStocks(company: string): Observable<any> {
+        return this.http.get<any>(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${company}&apikey=TI4UDE5Y8XR939VH`).pipe(
             tap(d => console.log(d)),
             catchError(this.handleError))
     }
