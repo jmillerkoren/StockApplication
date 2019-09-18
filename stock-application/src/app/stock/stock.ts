@@ -1,6 +1,12 @@
-export interface IStock {
-    low: number;
+export interface GlobalQuote {
+    company: string;
+    open: string;
     high: number;
-    close: number;
-    volume: number;
-}
+    low: number;
+    price: string;
+    volume: string;
+    latestTradingDay: string;
+    previousClose: string;
+    change: string;
+    changePercent: string;
+  }

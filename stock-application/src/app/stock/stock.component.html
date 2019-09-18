@@ -1,25 +1,47 @@
+<div class="container" id="d02">
+    <div class="row">
+        <div class="col-sm">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Companies
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="MSFT">Microsoft</a>
+                    <a class="dropdown-item" href="#">Apple</a>
+                    <a class="dropdown-item" href="#">Amazon</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            
+        </div>
+        <div class="col-sm">
+            
+        </div>
+    </div>
+</div>
 
-<div class="container" id="d01">
+<div class="container" id="d01">        
     <div class="card">
-        <div class="card-body">
-                <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Low</th>
-                                <th>High</th>
-                                <th>Close</th>
-                                <th>Volume</th>                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let stock of stocks">
-                                <td>{{stock.low}}</td>
-                                <td>{{stock.high}}</td>
-                                <td>{{stock.close}}</td>
-                                <td>{{stock.volume}}</td>
-                            </tr>
-                        </tbody>
-                </table>  
+        <div class="card-body">                
+            <table class="table">
+                <thead class="thead-dark" *ngIf='stock'>
+                    <tr>
+                        <th>Company</th>
+                        <th>High</th>
+                        <th>Low</th>
+                        <th>Volume</th>                                
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr>
+                        <td>{{stock.company}}</td>
+                        <td>{{stock.high | currency}}</td>
+                        <td>{{stock.low | currency}}</td>
+                        <td>{{stock.volume}}</td>
+                    </tr>
+                </tbody>
+            </table>  
         </div>
     </div>
 </div>
