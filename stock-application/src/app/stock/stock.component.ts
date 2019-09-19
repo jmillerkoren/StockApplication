@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CurrencyPipe } from '@angular/common'
 import { GlobalQuote } from './stock';
 import { StockService } from './stock.service';
 
