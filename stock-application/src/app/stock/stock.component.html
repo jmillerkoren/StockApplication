@@ -1,5 +1,5 @@
 <div>
-    <sa-chart></sa-chart>    
+    <sa-chart [stock]="stock"></sa-chart>    
 </div>
 
 
@@ -44,7 +44,7 @@
                         <td>{{stock.company}}</td>
                         <td>{{stock.high | currency}}</td>
                         <td>{{stock.low | currency}}</td>
-                        <td>{{stock.volume}}</td>
+                        <td>{{stock.volume | number:'5.0-0' }}</td>
                         <td>{{stock.latestTradingDay | date: 'dd/MM/yyyy' }}</td>
                     </tr>
                 </tbody>

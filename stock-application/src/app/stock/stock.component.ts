@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { GlobalQuote } from './stock';
 import { StockService } from './stock.service';
 
@@ -7,7 +7,7 @@ import { StockService } from './stock.service';
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.css']
 })
-export class StockComponent implements OnInit {
+export class StockComponent {
   stock: GlobalQuote = { 
     company: "string",
     open: "string",
@@ -21,24 +21,27 @@ export class StockComponent implements OnInit {
     changePercent: "string"
   };
 
-  example: string;
+  example: string = 'It worked';
 
   clickCompany(company: string) {
     this.stockService.getStocks(company).subscribe({
       next: result => {
-        this.stock.company = result["Global Quote"]["01. symbol"];        
-        this.stock.low = result['Global Quote']['04. low'];
-        this.stock.high = result['Global Quote']['03. high'];
-        this.stock.volume = result['Global Quote']['06. volume'];    
-        this.stock.latestTradingDay = result['Global Quote']['07. latest trading day'];                
+        let newStock: GlobalQuote = {
+          company: result["Global Quote"]["01. symbol"],
+          low: result['Global Quote']['04. low'],
+          high: result['Global Quote']['03. high'],
+          volume: result['Global Quote']['06. volume'],
+          latestTradingDay: result['Global Quote']['07. latest trading day'],
+          open: "string",
+          change: "string",
+          changePercent: "string",
+          price: "string",
+          previousClose: "string"
+       };
+        this.stock = newStock;               
       }
     });    
   }
 
   constructor(private stockService: StockService) { }
-
-  ngOnInit() {
-    
-  }
-
 }
