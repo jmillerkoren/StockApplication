@@ -18,13 +18,12 @@ export class ChartComponent implements OnInit, OnChanges {
     responsive: true
   };
 
-  public barChartLabels = ['h', '2007', '2008', '2009', '2010', '2011', '2012'];
+  public barChartLabels = ['Open', 'Low', 'High', 'Price'];
   public barChartType = 'bar';
   public barChartLegend = true
 
   public barChartData = [
-    {data: [65, 79, 56, 76, 67, 80], label: 'Series A'},
-    {data: [23, 67, 46, 79, 77, 90], label: 'Series B'}
+    {data: [65, 79, 56], label: 'Series A'}    
   ]
 
   ngOnChanges(changes: SimpleChanges) {
@@ -32,15 +31,17 @@ export class ChartComponent implements OnInit, OnChanges {
   }
 
   stockChange(changedStock: GlobalQuote) {
+    console.log(changedStock);
     this.stock = changedStock;
-    console.log(this.stock.low);
-    this.barChartLabels[0] = this.stock.low.toString();
+    this.barChartData[0].label = changedStock.company;
+    this.barChartData[0].data[0] = changedStock.high;
+    this.barChartData[0].data[1] = changedStock.low;    
   }
 
   constructor() { }
 
   ngOnInit() {
-    this.barChartLabels[0] = this.stock.low.toString();
+    
   }
 
 }

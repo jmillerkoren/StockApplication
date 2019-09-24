@@ -1,12 +1,12 @@
 export interface GlobalQuote {
     company: string;
-    open: string;
+    open: number;
     high: number;
     low: number;
-    price: string;
-    volume: string;
+    price: number;
+    volume: number;
     latestTradingDay: string;
     previousClose: string;
-    change: string;
-    changePercent: string;
+    change: number;
+    changePercent: number;
   }
