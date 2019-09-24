@@ -8,10 +8,7 @@ import { GlobalQuote } from '../../stock/stock';
 })
 export class ChartComponent implements OnInit, OnChanges {
 
-@Input() company: string;
 @Input() stock: GlobalQuote;
-@Input() example: string;
-
 
   public barChartOptions = {
     scaleShowVerticalLines: false,    
@@ -23,7 +20,7 @@ export class ChartComponent implements OnInit, OnChanges {
   public barChartLegend = true
 
   public barChartData = [
-    {data: [65, 79, 56], label: 'Series A'}    
+    {data: [65, 79, 56], label: 'Pick a company'}    
   ]
 
   ngOnChanges(changes: SimpleChanges) {
@@ -33,9 +30,8 @@ export class ChartComponent implements OnInit, OnChanges {
   stockChange(changedStock: GlobalQuote) {
     console.log(changedStock);
     this.stock = changedStock;
-    this.barChartData[0].label = changedStock.company;
-    this.barChartData[0].data[0] = changedStock.high;
-    this.barChartData[0].data[1] = changedStock.low;    
+    let newData = [{data: [changedStock.open, changedStock.low, changedStock.high, changedStock.price], label: changedStock.company}];
+    this.barChartData = newData;
   }
 
   constructor() { }

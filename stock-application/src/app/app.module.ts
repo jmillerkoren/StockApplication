@@ -5,13 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StockComponent } from './stock/stock.component';
 import { ChartComponent } from './shared/chart/chart.component';
-import { ChartsModule } from 'ng2-charts'
+import { ChartsModule } from 'ng2-charts';
+import { StockListComponent } from './stock-list/stock-list.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     StockComponent,
-    ChartComponent
+    ChartComponent,
+    StockListComponent
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,7 @@ import { StockService } from './stock.service';
 })
 export class StockComponent {
   stock: GlobalQuote = { 
-    company: "string",
+    company: "Pick a company",
     open: 0,
     high: 0,
     low: 0,
@@ -19,9 +19,7 @@ export class StockComponent {
     previousClose: "string",
     change: 0,
     changePercent: 0
-  };
-
-  example: string = 'It worked';
+  }; 
 
   clickCompany(company: string) {
     this.stockService.getStocks(company).subscribe({
