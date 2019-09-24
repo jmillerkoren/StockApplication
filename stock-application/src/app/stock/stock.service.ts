@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { GlobalQuote } from './stock';
 
 @Injectable({
@@ -15,8 +15,23 @@ export class StockService {
 
     }
 
-    getStocks(company: string): Observable<any> {
-        return this.http.get<any>(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${company}&apikey=${this.apiKey}`).pipe(            
+    getStocks(company: string): Observable<GlobalQuote> {
+        return this.http.get<any>(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${company}&apikey=${this.apiKey}`).pipe(  
+            map(result => {
+                let newStock: GlobalQuote = {
+                    company: result["Global Quote"]["01. symbol"],
+                    low: result['Global Quote']['04. low'],
+                    high: result['Global Quote']['03. high'],
+                    volume: result['Global Quote']['06. volume'],
+                    latestTradingDay: result['Global Quote']['07. latest trading day'],
+                    open: result['Global Quote']['02. open'],
+                    change: 0,
+                    changePercent: 0,
+                    price: result['Global Quote']['05. price'],
+                    previousClose: "string"
+                 };
+                 return newStock;
+            }),          
             catchError(this.handleError))
     }
 

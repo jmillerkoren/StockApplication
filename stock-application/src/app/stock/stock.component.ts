@@ -23,21 +23,7 @@ export class StockComponent {
 
   clickCompany(company: string) {
     this.stockService.getStocks(company).subscribe({
-      next: result => {
-        let newStock: GlobalQuote = {
-          company: result["Global Quote"]["01. symbol"],
-          low: result['Global Quote']['04. low'],
-          high: result['Global Quote']['03. high'],
-          volume: result['Global Quote']['06. volume'],
-          latestTradingDay: result['Global Quote']['07. latest trading day'],
-          open: result['Global Quote']['02. open'],
-          change: 0,
-          changePercent: 0,
-          price: result['Global Quote']['05. price'],
-          previousClose: "string"
-       };
-        this.stock = newStock;               
-      }
+      next: result => this.stock = result
     });    
   }
 
