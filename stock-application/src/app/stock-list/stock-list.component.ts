@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GlobalQuote } from '../stock/stock';
+import { StockService } from '../stock/stock.service';
 
 @Component({
   selector: 'sa-stock-list',
@@ -7,7 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StockListComponent implements OnInit {
 
-  constructor() { }
+  stocks: GlobalQuote[];
+
+  constructor(private stockService: StockService) { }
+
+  getListStocks (company: string) {
+    this.stockService.getListStocks(company).subscribe({
+      next: result => this.stocks = result
+    });
+  }
+  
+
 
   ngOnInit() {
   }

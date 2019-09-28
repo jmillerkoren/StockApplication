@@ -1,1 +1,44 @@
-<p>stock-list works!</p>
+<div>
+    <sa-linechart [stocks]="stocks"></sa-linechart>
+</div>
+
+<div class="container">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+            Companies
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" (click)="getListStocks('MSFT')">Microsoft</a>
+            <a class="dropdown-item" (click)="getListStocks('GOOG')">Google</a>
+            <a class="dropdown-item" (click)="getListStocks('AMD')">AMD</a>
+        </div>
+    </div>
+</div>
+
+<div class=container>
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Company</th>
+                        <th>High</th>
+                        <th>Low</th>
+                        <th>Volume</th>
+                        <th>Latest Trading Day</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stock of stocks">
+                        <td>{{stock.company}}</td>
+                        <td>{{stock.high | currency}}</td>
+                        <td>{{stock.low | currency}}</td>
+                        <td>{{stock.volume | number:'5.0-0' }}</td>
+                        <td>{{stock.latestTradingDay | date: 'dd/MM/yyyy' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

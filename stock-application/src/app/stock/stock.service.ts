@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { GlobalQuote } from './stock';
 
 @Injectable({
     providedIn: 'root'
 })
-export class StockService {   
-    
+export class StockService {
+
     private apiKey: string = "TI4UDE5Y8XR939VH"
 
-    constructor(private http: HttpClient) {
-
-    }
+    constructor(private http: HttpClient) { }
 
     getStocks(company: string): Observable<GlobalQuote> {
-        return this.http.get<any>(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${company}&apikey=${this.apiKey}`).pipe(  
+        return this.http.get<any>(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${company}&apikey=${this.apiKey}`).pipe(
             map(result => {
                 let newStock: GlobalQuote = {
                     company: result["Global Quote"]["01. symbol"],
@@ -29,16 +27,48 @@ export class StockService {
                     changePercent: 0,
                     price: result['Global Quote']['05. price'],
                     previousClose: "string"
-                 };
-                 return newStock;
-            }),          
+                };
+                return newStock;
+            }),
             catchError(this.handleError))
     }
 
     getListStocks(company: string): Observable<GlobalQuote[]> {
-        return this.http.get<any>(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${company}&apikey=${this.apiKey}`).pipe(
-            
-        )
+        let stockList: GlobalQuote[] = [];   
+        let local = localStorage.getItem(`stock-list-${company}`)           
+        if (local !== null && local !== '[]') {
+            stockList = JSON.parse(localStorage.getItem(`stock-list-${company}`));
+            return of(stockList);                  
+        }
+
+        return this.http.get<any>(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${company}&apikey=${this.apiKey}`).pipe(
+            map(result => {
+                
+                let stockJson = result["Weekly Time Series"];                
+                for (let value in stockJson) {
+                    let stock: GlobalQuote = this.mapNewStock(stockJson, value);                    
+                    stockList.push(stock);                    
+                }                
+                localStorage.setItem(`stock-list-${company}`, JSON.stringify(stockList));                    
+                return stockList;
+            }),
+            catchError(this.handleError))
+    }
+
+    private mapNewStock(result: any, property: string): GlobalQuote  {
+        let stock: GlobalQuote = {
+            company: 'MSFT',
+            open: result[property]["1. open"],
+            high: result[property]["2. high"],
+            low: result[property]["3. low"],
+            price: 0,
+            volume: result[property]["5. volume"],
+            latestTradingDay: property,
+            previousClose: '',
+            change: 0,
+            changePercent: 0
+        }
+        return stock;
     }
 
     private handleError(err: HttpErrorResponse) {
@@ -48,7 +78,7 @@ export class StockService {
         }
         else {
             errMsg = `Server returned code: ${err.status}, error message is: ${err.message}`;
-        }        
+        }
         return throwError(errMsg);
     }
 
