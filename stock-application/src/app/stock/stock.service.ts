@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { GlobalQuote } from './stock';
+import { LocalStocks } from './local-stock';
 
 @Injectable({
     providedIn: 'root'
@@ -35,9 +36,9 @@ export class StockService {
 
     getListStocks(company: string): Observable<GlobalQuote[]> {
         let stockList: GlobalQuote[] = [];   
-        let local = localStorage.getItem(`stock-list-${company}`)           
-        if (local !== null && local !== '[]') {
-            stockList = JSON.parse(localStorage.getItem(`stock-list-${company}`));
+        let local: LocalStocks = JSON.parse(localStorage.getItem(`stock-list-${company}`))                      
+        if (local !== null && local.stocks.length !== 0 && this.validStock(local) ) {            
+            stockList = local.stocks;
             return of(stockList);                  
         }
 
@@ -47,12 +48,26 @@ export class StockService {
                 let stockJson = result["Weekly Time Series"];                
                 for (let value in stockJson) {
                     let stock: GlobalQuote = this.mapNewStock(stockJson, value);                    
-                    stockList.push(stock);                    
-                }                
-                localStorage.setItem(`stock-list-${company}`, JSON.stringify(stockList));                    
+                    stockList.push(stock);                  
+                }  
+                let currrentDate = new Date();                
+                let localStocks: LocalStocks = {
+                    stocks: stockList,
+                    dateRetrieved: currrentDate  
+                };
+                localStorage.setItem(`stock-list-${company}`, JSON.stringify(localStocks));                    
                 return stockList;
             }),
             catchError(this.handleError))
+    }
+
+    private validStock(localStocks: LocalStocks): boolean {
+        localStocks.dateRetrieved = new Date(localStocks.dateRetrieved); 
+        let currentDate: Date = new Date();
+        if (localStocks.dateRetrieved.getDay() + 1 == currentDate.getDay()) {
+            return false;
+        }
+        return true;        
     }
 
     private mapNewStock(result: any, property: string): GlobalQuote  {
