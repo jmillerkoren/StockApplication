@@ -3,15 +3,24 @@
 </div>
 
 <div class="container">
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="true">
-            Companies
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" (click)="getListStocks('MSFT')">Microsoft</a>
-            <a class="dropdown-item" (click)="getListStocks('GOOG')">Google</a>
-            <a class="dropdown-item" (click)="getListStocks('AMD')">AMD</a>
+    <div class="row">
+        <div class="col">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Companies
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="getListStocks('MSFT')">Microsoft</a>
+                    <a class="dropdown-item" (click)="getListStocks('GOOG')">Google</a>
+                    <a class="dropdown-item" (click)="getListStocks('AMD')">AMD</a>
+                </div>
+            </div>
+        </div>
+        <div class="col  d-flex justify-content-end" *ngIf="stocks">
+            <button class="btn btn-secondary" type="button" (click)="toggleStocks()" [innerHTML]="toggle">
+                Hide Stocks
+            </button>
         </div>
     </div>
 </div>
@@ -30,7 +39,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let stock of stocks">
+                    <tr *ngFor="let stock of displayStocks">
                         <td>{{stock.company}}</td>
                         <td>{{stock.high | currency}}</td>
                         <td>{{stock.low | currency}}</td>

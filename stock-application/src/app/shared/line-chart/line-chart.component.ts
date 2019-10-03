@@ -11,7 +11,7 @@ export class LineChartComponent implements OnInit, OnChanges {
     public lineChartData = [{ data: [], label: "Pick a company" }];
     public lineChartType = 'line';    
     public lineChartLabels = [];
-    public lineChartOptions: any = { legend: { display: true, labels: { fontColor: 'black' } }};
+    public lineChartOptions: any = { legend: { display: true, labels: { fontColor: 'black' } }, responsive: true};
 
     ngOnChanges(changes: SimpleChanges) {
         this.changedStocks(changes.stocks.currentValue);
@@ -36,7 +36,12 @@ export class LineChartComponent implements OnInit, OnChanges {
         }
         let newLineChartData = [{ data: newLowData, label: "Low" }, { data: newHighData, label: "high"}];
         this.lineChartData = newLineChartData;
-        this.lineChartLabels = newLabels;        
+        this.lineChartLabels = newLabels;  
+              
+    }
+
+    filterStocks(range: number) {
+
     }
 
     ngOnInit() {

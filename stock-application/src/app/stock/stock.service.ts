@@ -37,7 +37,7 @@ export class StockService {
     getListStocks(company: string): Observable<GlobalQuote[]> {
         let stockList: GlobalQuote[] = [];   
         let local: LocalStocks = JSON.parse(localStorage.getItem(`stock-list-${company}`))                      
-        if (local !== null && local.stocks.length !== 0 && this.validStock(local) ) {            
+        if (local !== null && local.stocks.length !== 0 && this.validStock(local)) {            
             stockList = local.stocks;
             return of(stockList);                  
         }
@@ -60,11 +60,11 @@ export class StockService {
             }),
             catchError(this.handleError))
     }
-
+    
     private validStock(localStocks: LocalStocks): boolean {
         localStocks.dateRetrieved = new Date(localStocks.dateRetrieved); 
-        let currentDate: Date = new Date();
-        if (localStocks.dateRetrieved.getDay() + 1 == currentDate.getDay()) {
+        let currentDate: Date = new Date();             
+        if ((localStocks.dateRetrieved.getDay() + 1) === (currentDate.getDay())) {
             return false;
         }
         return true;        
