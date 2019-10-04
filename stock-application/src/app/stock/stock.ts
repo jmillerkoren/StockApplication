@@ -5,7 +5,7 @@ export interface GlobalQuote {
   low: number;
   price: number;
   volume: number;
-  latestTradingDay: string;
+  latestTradingDay: Date;
   previousClose: string;
   change: number;
   changePercent: number;

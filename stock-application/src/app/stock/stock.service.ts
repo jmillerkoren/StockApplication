@@ -60,7 +60,7 @@ export class StockService {
             }),
             catchError(this.handleError))
     }
-    
+
     private validStock(localStocks: LocalStocks): boolean {
         localStocks.dateRetrieved = new Date(localStocks.dateRetrieved); 
         let currentDate: Date = new Date();             
@@ -78,7 +78,7 @@ export class StockService {
             low: result[property]["3. low"],
             price: 0,
             volume: result[property]["5. volume"],
-            latestTradingDay: property,
+            latestTradingDay: new Date(property),
             previousClose: '',
             change: 0,
             changePercent: 0

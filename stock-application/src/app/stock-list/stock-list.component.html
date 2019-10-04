@@ -1,5 +1,5 @@
 <div>
-    <sa-linechart [stocks]="stocks"></sa-linechart>
+    <sa-linechart [filteredStocks]="filteredStocks"></sa-linechart>
 </div>
 
 <div class="container">
@@ -16,6 +16,19 @@
                     <a class="dropdown-item" (click)="getListStocks('AMD')">AMD</a>
                 </div>
             </div>
+        </div>
+        <div class="col" *ngIf="stocks">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" style="cursor: pointer;" (click)="filterStocksMonth()">1 Month</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" style="cursor: pointer;" onclick="">1 Year</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" style="cursor: pointer;" onclick="">10 Years</a>
+                </li>                
+            </ul>
         </div>
         <div class="col  d-flex justify-content-end" *ngIf="stocks">
             <button class="btn btn-secondary" type="button" (click)="toggleStocks()" [innerHTML]="toggle">

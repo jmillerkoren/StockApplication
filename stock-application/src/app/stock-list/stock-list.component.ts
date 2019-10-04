@@ -11,8 +11,9 @@ export class StockListComponent implements OnInit {
 
   private toggleOn: string = "Show Stocks";
   private toggleOff: string = "Hide Stocks";
-  stocks: GlobalQuote[];
+  stocks: GlobalQuote[];  
   displayStocks: GlobalQuote[];   
+  filteredStocks: GlobalQuote[];  
   toggle: string;
 
   constructor(private stockService: StockService) { }
@@ -22,6 +23,7 @@ export class StockListComponent implements OnInit {
       next: result => {
         this.stocks = result
         this.displayStocks = result; 
+        this.filteredStocks = result;
         this.toggle = this.toggleOff;       
       }
     });
@@ -35,6 +37,26 @@ export class StockListComponent implements OnInit {
     }
     this.displayStocks = null;  
     this.toggle = this.toggleOn;    
+  }
+
+  filterStocksMonth() {
+    let currentDate = new Date();    
+    let filtered = this.stocks.filter(x => {
+      let date = new Date(x.latestTradingDay);
+      if (((date.getMonth() === currentDate.getMonth()) || (date.getMonth() <= (currentDate.getMonth() + 6))) && date.getFullYear() === currentDate.getFullYear()) {
+        return x;
+      }
+      });
+    this.filteredStocks = filtered; 
+    this.displayStocks = filtered;       
+  }
+
+  filterStocksYear() {
+
+  }
+
+  filterStocksDecade() {
+
   }
 
   ngOnInit() {

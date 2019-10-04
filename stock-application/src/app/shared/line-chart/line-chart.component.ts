@@ -6,7 +6,7 @@ import { GlobalQuote } from 'src/app/stock/stock';
     templateUrl: './line-chart.component.html',    
 })
 export class LineChartComponent implements OnInit, OnChanges {
-    @Input() stocks: GlobalQuote[];
+    @Input() filteredStocks: GlobalQuote[];
 
     public lineChartData = [{ data: [], label: "Pick a company" }];
     public lineChartType = 'line';    
@@ -14,35 +14,32 @@ export class LineChartComponent implements OnInit, OnChanges {
     public lineChartOptions: any = { legend: { display: true, labels: { fontColor: 'black' } }, responsive: true};
 
     ngOnChanges(changes: SimpleChanges) {
-        this.changedStocks(changes.stocks.currentValue);
+        this.changedStocks(changes.filteredStocks.currentValue);
     }
 
     changedStocks(currentValue: any) {
-        this.stocks = currentValue;
+        this.filteredStocks = currentValue;
         let newLowData: number[] = [];
         let newHighData: number[] = [];
         let newLabels: string[] = []
 
-        if (this.stocks === undefined) {
+        if (this.filteredStocks === undefined) {
             return;
         }
         
         let index = 0;
-        for (let i = this.stocks.length - 1; i >= 0; --i) {            
-            newLowData[index] = this.stocks[i].low;
-            newHighData[index] = this.stocks[i].high;
-            newLabels[index] = this.stocks[i].latestTradingDay;
+        for (let i = this.filteredStocks.length - 1; i >= 0; --i) {            
+            newLowData[index] = this.filteredStocks[i].low;
+            newHighData[index] = this.filteredStocks[i].high;
+            let correctDate = new Date(this.filteredStocks[i].latestTradingDay);
+            newLabels[index] = correctDate.toDateString();
             index++;
         }
         let newLineChartData = [{ data: newLowData, label: "Low" }, { data: newHighData, label: "high"}];
         this.lineChartData = newLineChartData;
         this.lineChartLabels = newLabels;  
               
-    }
-
-    filterStocks(range: number) {
-
-    }
+    }    
 
     ngOnInit() {
     }

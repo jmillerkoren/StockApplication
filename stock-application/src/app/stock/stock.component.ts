@@ -15,7 +15,7 @@ export class StockComponent {
     low: 0,
     price: 0,
     volume: 0,
-    latestTradingDay: '00/00/0000',
+    latestTradingDay: new Date('00/00/0000'),
     previousClose: "string",
     change: 0,
     changePercent: 0
@@ -23,7 +23,7 @@ export class StockComponent {
 
   clickCompany(company: string) {
     this.stockService.getStocks(company).subscribe({
-      next: result => this.stock = result
+      next: result => this.stock = result 
     });    
   }
 
