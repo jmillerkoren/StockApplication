@@ -17,16 +17,19 @@
                 </div>
             </div>
         </div>
-        <div class="col" *ngIf="stocks">
+        <div class="col-6" *ngIf="stocks">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" style="cursor: pointer;" (click)="filterStocksMonth()">1 Month</a>
+                    <a class="nav-link active" style="cursor: pointer;" (click)="filterStocksMonth()">6 Months</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" style="cursor: pointer;" onclick="">1 Year</a>
+                    <a class="nav-link active" style="cursor: pointer;" (click)="filterStocksYear()">1 Year</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" style="cursor: pointer;" onclick="">10 Years</a>
+                    <a class="nav-link active" style="cursor: pointer;" (click)="filterStocksDecade()">10 Years</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" style="cursor: pointer;" (click)="filterStocksAllTime()">All Time</a>
                 </li>                
             </ul>
         </div>

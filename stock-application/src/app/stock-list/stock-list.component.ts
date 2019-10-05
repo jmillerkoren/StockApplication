@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalQuote } from '../stock/stock';
 import { StockService } from '../stock/stock.service';
+import { CompareDate } from '../shared/compare-date.service';
 
 @Component({
   selector: 'sa-stock-list',
@@ -16,7 +17,7 @@ export class StockListComponent implements OnInit {
   filteredStocks: GlobalQuote[];  
   toggle: string;
 
-  constructor(private stockService: StockService) { }
+  constructor(private stockService: StockService, private compareDate: CompareDate) { }
 
   getListStocks (company: string) {
     this.stockService.getListStocks(company).subscribe({
@@ -39,11 +40,13 @@ export class StockListComponent implements OnInit {
     this.toggle = this.toggleOn;    
   }
 
-  filterStocksMonth() {
-    let currentDate = new Date();    
+  filterStocksMonth() {    
     let filtered = this.stocks.filter(x => {
       let date = new Date(x.latestTradingDay);
-      if (((date.getMonth() === currentDate.getMonth()) || (date.getMonth() <= (currentDate.getMonth() + 6))) && date.getFullYear() === currentDate.getFullYear()) {
+      let end = new Date();
+      let start = new Date();
+      start.setMonth(start.getMonth() - 6);
+      if (this.compareDate.inRangeMonth(date, start, end)) {
         return x;
       }
       });
@@ -52,11 +55,35 @@ export class StockListComponent implements OnInit {
   }
 
   filterStocksYear() {
-
+    let filtered = this.stocks.filter(x => {
+      let date = new Date(x.latestTradingDay);
+      let end = new Date();
+      let start = new Date();
+      start.setFullYear(start.getFullYear() - 1);
+      if (this.compareDate.inRangeMonth(date, start, end)) {
+        return x;
+      }
+      });
+    this.filteredStocks = filtered; 
+    this.displayStocks = filtered;   
   }
 
   filterStocksDecade() {
+    let filtered = this.stocks.filter(x => {
+      let date = new Date(x.latestTradingDay);
+      let end = new Date();
+      let start = new Date();
+      start.setFullYear(start.getFullYear() - 10);
+      if (this.compareDate.inRangeMonth(date, start, end)) {
+        return x;
+      }
+      });
+    this.filteredStocks = filtered; 
+    this.displayStocks = filtered;  
+  }
 
+  filterStocksAllTime() {
+    this.filteredStocks = this.stocks;
   }
 
   ngOnInit() {
