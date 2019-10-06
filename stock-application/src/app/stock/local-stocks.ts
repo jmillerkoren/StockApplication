@@ -1,6 +1,6 @@
 import { GlobalQuote } from "./stock";
 
-export interface LocalStock {
-    stock: GlobalQuote;
+export interface LocalStocks {
+    stocks: GlobalQuote[];
     dateRetrieved: Date;
 }

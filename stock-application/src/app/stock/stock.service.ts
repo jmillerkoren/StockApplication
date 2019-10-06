@@ -3,7 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { GlobalQuote } from './stock';
-import { LocalStocks } from './local-stock';
+import { LocalStocks } from './local-stocks';
+import { LocalStock } from './local-stock';
 
 @Injectable({
     providedIn: 'root'
@@ -15,9 +16,15 @@ export class StockService {
     constructor(private http: HttpClient) { }
 
     getStocks(company: string): Observable<GlobalQuote> {
+        let newStock: GlobalQuote;
+        let local: LocalStock = JSON.parse(localStorage.getItem(`stock-${company}`));
+        if (local != undefined && this.validStock(local)) {
+            newStock = local.stock
+            return of(newStock);
+        }
         return this.http.get<any>(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${company}&apikey=${this.apiKey}`).pipe(
             map(result => {
-                let newStock: GlobalQuote = {
+                  newStock = {
                     company: result["Global Quote"]["01. symbol"],
                     low: result['Global Quote']['04. low'],
                     high: result['Global Quote']['03. high'],
@@ -28,7 +35,12 @@ export class StockService {
                     changePercent: 0,
                     price: result['Global Quote']['05. price'],
                     previousClose: "string"
-                };
+                };                
+                local = {
+                    stock: newStock,
+                    dateRetrieved: new Date()
+                }
+                localStorage.setItem(`stock-${company}`, JSON.stringify(local));                      
                 return newStock;
             }),
             catchError(this.handleError))
@@ -37,7 +49,7 @@ export class StockService {
     getListStocks(company: string): Observable<GlobalQuote[]> {
         let stockList: GlobalQuote[] = [];   
         let local: LocalStocks = JSON.parse(localStorage.getItem(`stock-list-${company}`))                      
-        if (local !== null && local.stocks.length !== 0 && this.validStock(local)) {            
+        if (local !== null && local.stocks.length !== 0 && this.validStocks(local)) {            
             stockList = local.stocks;
             return of(stockList);                  
         }
@@ -45,9 +57,10 @@ export class StockService {
         return this.http.get<any>(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${company}&apikey=${this.apiKey}`).pipe(
             map(result => {
                 
-                let stockJson = result["Weekly Time Series"];                
+                let stockJson = result["Weekly Time Series"];
+                let company: string = result["Meta Data"]["2. Symbol"];                
                 for (let value in stockJson) {
-                    let stock: GlobalQuote = this.mapNewStock(stockJson, value);                    
+                    let stock: GlobalQuote = this.mapNewStock(stockJson, value, company);                    
                     stockList.push(stock);                  
                 }  
                 let currrentDate = new Date();                
@@ -61,7 +74,17 @@ export class StockService {
             catchError(this.handleError))
     }
 
-    private validStock(localStocks: LocalStocks): boolean {
+    // Look to refactor how local stock/stocks are structured.
+    private validStock(localStock: LocalStock): boolean {
+        localStock.dateRetrieved = new Date(localStock.dateRetrieved)
+        let currentDate: Date = new Date();  
+        if ((localStock.dateRetrieved.getDay() + 1) === (currentDate.getDay())) {
+            return false;
+        }
+        return true;
+    }
+
+    private validStocks(localStocks: LocalStocks): boolean {
         localStocks.dateRetrieved = new Date(localStocks.dateRetrieved); 
         let currentDate: Date = new Date();             
         if ((localStocks.dateRetrieved.getDay() + 1) === (currentDate.getDay())) {
@@ -70,9 +93,9 @@ export class StockService {
         return true;        
     }
 
-    private mapNewStock(result: any, property: string): GlobalQuote  {
+    private mapNewStock(result: any, property: string, company: string): GlobalQuote  {
         let stock: GlobalQuote = {
-            company: 'MSFT',
+            company: company,
             open: result[property]["1. open"],
             high: result[property]["2. high"],
             low: result[property]["3. low"],
