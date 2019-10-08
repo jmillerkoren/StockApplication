@@ -8,23 +8,27 @@ import { StockService } from './stock.service';
   styleUrls: ['./stock.component.css']
 })
 export class StockComponent {
-  stock: GlobalQuote = { 
-    company: "Pick a company",
-    open: 0,
-    high: 0,
-    low: 0,
-    price: 0,
-    volume: 0,
-    latestTradingDay: new Date('00/00/0000'),
-    previousClose: "string",
-    change: 0,
-    changePercent: 0
-  }; 
+  stocks: GlobalQuote[] = [];
 
   clickCompany(company: string) {
     this.stockService.getStocks(company).subscribe({
-      next: result => this.stock = result 
+      next: result => {
+        let newStocks = [];
+        this.stocks.map(item => newStocks.push(item));
+        newStocks.push(result);
+        this.stocks = newStocks;        
+      }  
     });    
+  }
+
+  Test(e, company) {  
+    if (e.currentTarget.checked) {
+      this.clickCompany(company);
+    }  
+    else {
+      let stocksRemoved = this.stocks.filter(x => x.company !== company);
+      this.stocks = stocksRemoved;
+    }
   }
 
   constructor(private stockService: StockService) { }

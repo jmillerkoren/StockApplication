@@ -77,20 +77,24 @@ export class StockService {
     // Look to refactor how local stock/stocks are structured.
     private validStock(localStock: LocalStock): boolean {
         localStock.dateRetrieved = new Date(localStock.dateRetrieved)
-        let currentDate: Date = new Date();  
-        if ((localStock.dateRetrieved.getDay() + 1) === (currentDate.getDay())) {
+        let currentDate: Date = new Date();
+        let dayAfterRetrieved: Date = new Date(localStock.dateRetrieved)
+        dayAfterRetrieved.setDate(localStock.dateRetrieved.getDate() + 1);  
+        if (dayAfterRetrieved <= currentDate) {
             return false;
         }
         return true;
     }
 
     private validStocks(localStocks: LocalStocks): boolean {
-        localStocks.dateRetrieved = new Date(localStocks.dateRetrieved); 
-        let currentDate: Date = new Date();             
-        if ((localStocks.dateRetrieved.getDay() + 1) === (currentDate.getDay())) {
+        localStocks.dateRetrieved = new Date(localStocks.dateRetrieved)
+        let currentDate: Date = new Date();
+        let dayAfterRetrieved: Date = new Date(localStocks.dateRetrieved)
+        dayAfterRetrieved.setDate(localStocks.dateRetrieved.getDate() + 1);  
+        if (dayAfterRetrieved <= currentDate) {
             return false;
         }
-        return true;        
+        return true;       
     }
 
     private mapNewStock(result: any, property: string, company: string): GlobalQuote  {

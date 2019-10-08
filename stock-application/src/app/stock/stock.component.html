@@ -1,34 +1,39 @@
 <div>
-    <sa-chart [stock]="stock"></sa-chart>    
+    <sa-chart [stocks]="stocks"></sa-chart>
 </div>
 
 
 <div class="container" id="d02">
-    <div class="row">
-        <div class="col-sm">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Companies
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" (click)="clickCompany('MSFT')">Microsoft</a>
-                    <a class="dropdown-item" (click)="clickCompany('GOOG')">Google</a>
-                    <a class="dropdown-item" (click)="clickCompany('AMD')">AMD</a>
-                </div>
+    <div class="row">        
+        <div class="col d-flex justify-content-center">
+            <h3 class="text-info">Pick a company to view their most recent stock values!</h3>
+        </div>
+    </div>
+    <div class="row" id="boxrow">
+        <div class="col-4 d-flex justify-content-center">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="company1" (change)="Test($event, 'MSFT')">
+                <label class="custom-control-label" for="company1">Microsoft</label>
             </div>
         </div>
-        <div class="col-med">
-            <h3 class="text-info">Pick a company to view their most recent stock values!</h3>            
+        <div class="col-4 d-flex justify-content-center">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="company2" (change)="Test($event, 'GOOG')">
+                <label class="custom-control-label" for="company2">Google</label>
+            </div>
         </div>
-        <div class="col-sm">
-            
+        <div class="col-4 d-flex justify-content-center">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="company3" (change)="Test($event, 'AMD')">
+                <label class="custom-control-label" for="company3">AMD</label>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="container" id="d01" *ngIf="stock.company !== 'Pick a company'">        
+<div class="container" id="d01">
     <div class="card">
-        <div class="card-body">                
+        <div class="card-body">
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
@@ -40,7 +45,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                     <tr>
+                    <tr *ngFor="let stock of stocks">
                         <td>{{stock.company}}</td>
                         <td>{{stock.high | currency}}</td>
                         <td>{{stock.low | currency}}</td>
@@ -48,7 +53,7 @@
                         <td>{{stock.latestTradingDay | date: 'dd/MM/yyyy' }}</td>
                     </tr>
                 </tbody>
-            </table>  
+            </table>
         </div>
     </div>
 </div>
