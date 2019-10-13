@@ -16,7 +16,11 @@ export class StockComponent {
         let newStocks = [];
         this.stocks.map(item => newStocks.push(item));
         newStocks.push(result);
-        this.stocks = newStocks;        
+        this.stocks = newStocks; 
+        let api_result = this.stockService.callApi(result).subscribe({
+          next: result => console.log(result)
+        }); 
+        console.log(api_result);      
       }  
     });    
   }

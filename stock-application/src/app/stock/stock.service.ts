@@ -74,6 +74,10 @@ export class StockService {
             catchError(this.handleError))
     }
 
+    callApi(stock: GlobalQuote): Observable<any> {
+        return this.http.post('http://127.0.0.1:5000/stock-app/api/v1.0/calculate', JSON.stringify(stock));
+    }
+
     // Look to refactor how local stock/stocks are structured.
     private validStock(localStock: LocalStock): boolean {
         localStock.dateRetrieved = new Date(localStock.dateRetrieved)
