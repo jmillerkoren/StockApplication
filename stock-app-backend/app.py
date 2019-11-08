@@ -1,5 +1,4 @@
 import json
-
 import numpy as np
 from flask import Flask, jsonify, request, Response
 import tensorflow as tf
@@ -44,13 +43,13 @@ def predict_stocks():
     stocks, stock_dates = preprocess_data("./sample-stocks.json")
     data_mean = stocks.mean()
     data_std = stocks.std()
-    stocks = (stocks - data_mean) / data_std
-    model = tf.keras.models.load_model("C:\\Users\\Joshua Miller-Koren\\AppData\\Local\\Temp\\1")
+    # stocks = (stocks - data_mean) / data_std
+    model = tf.keras.models.load_model("./1")
     temp = [stocks]
     x_prev = np.array(temp)
     print(model)
     prediction = model.predict(x_prev)
-    prediction = prediction * data_std + data_mean
+    # prediction = prediction * data_std + data_mean
     pred_list = prediction.tolist()
     json = {"stocks": pred_list}
     return jsonify(json)
