@@ -16,19 +16,15 @@ export class StockComponent {
         let newStocks = [];
         this.stocks.map(item => newStocks.push(item));
         newStocks.push(result);
-        this.stocks = newStocks; 
-        let api_result = this.stockService.callApi(result).subscribe({
-          next: result => console.log(result)
-        }); 
-        console.log(api_result);      
-      }  
-    });    
+        this.stocks = newStocks;
+      }
+    });
   }
 
-  Test(e, company) {  
+  Test(e, company) {
     if (e.currentTarget.checked) {
       this.clickCompany(company);
-    }  
+    }
     else {
       let stocksRemoved = this.stocks.filter(x => x.company !== company);
       this.stocks = stocksRemoved;

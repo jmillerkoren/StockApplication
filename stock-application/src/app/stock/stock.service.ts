@@ -35,46 +35,46 @@ export class StockService {
                     changePercent: 0,
                     price: result['Global Quote']['05. price'],
                     previousClose: "string"
-                };                
+                };
                 local = {
                     stock: newStock,
                     dateRetrieved: new Date()
                 }
-                localStorage.setItem(`stock-${company}`, JSON.stringify(local));                      
+                localStorage.setItem(`stock-${company}`, JSON.stringify(local));
                 return newStock;
             }),
             catchError(this.handleError))
     }
 
     getListStocks(company: string): Observable<GlobalQuote[]> {
-        let stockList: GlobalQuote[] = [];   
-        let local: LocalStocks = JSON.parse(localStorage.getItem(`stock-list-${company}`))                      
-        if (local !== null && local.stocks.length !== 0 && this.validStocks(local)) {            
+        let stockList: GlobalQuote[] = [];
+        let local: LocalStocks = JSON.parse(localStorage.getItem(`stock-list-${company}`))
+        if (local !== null && local.stocks.length !== 0 && this.validStocks(local)) {
             stockList = local.stocks;
-            return of(stockList);                  
+            return of(stockList);
         }
 
         return this.http.get<any>(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${company}&apikey=${this.apiKey}`).pipe(
             map(result => {
-                
+
                 let stockJson = result["Weekly Time Series"];
-                let company: string = result["Meta Data"]["2. Symbol"];                
+                let company: string = result["Meta Data"]["2. Symbol"];
                 for (let value in stockJson) {
-                    let stock: GlobalQuote = this.mapNewStock(stockJson, value, company);                    
-                    stockList.push(stock);                  
-                }  
-                let currrentDate = new Date();                
+                    let stock: GlobalQuote = this.mapNewStock(stockJson, value, company);
+                    stockList.push(stock);
+                }
+                let currrentDate = new Date();
                 let localStocks: LocalStocks = {
                     stocks: stockList,
-                    dateRetrieved: currrentDate  
+                    dateRetrieved: currrentDate
                 };
-                localStorage.setItem(`stock-list-${company}`, JSON.stringify(localStocks));                    
+                localStorage.setItem(`stock-list-${company}`, JSON.stringify(localStocks));
                 return stockList;
             }),
             catchError(this.handleError))
     }
 
-    callApi(stock: GlobalQuote): Observable<any> {
+    stockPredictions(stock: GlobalQuote): Observable<any> {
         return this.http.post('http://127.0.0.1:5000/stock-app/api/v1.0/calculate', JSON.stringify(stock));
     }
 
@@ -83,7 +83,7 @@ export class StockService {
         localStock.dateRetrieved = new Date(localStock.dateRetrieved)
         let currentDate: Date = new Date();
         let dayAfterRetrieved: Date = new Date(localStock.dateRetrieved)
-        dayAfterRetrieved.setDate(localStock.dateRetrieved.getDate() + 1);  
+        dayAfterRetrieved.setDate(localStock.dateRetrieved.getDate() + 1);
         if (dayAfterRetrieved <= currentDate) {
             return false;
         }
@@ -94,11 +94,11 @@ export class StockService {
         localStocks.dateRetrieved = new Date(localStocks.dateRetrieved)
         let currentDate: Date = new Date();
         let dayAfterRetrieved: Date = new Date(localStocks.dateRetrieved)
-        dayAfterRetrieved.setDate(localStocks.dateRetrieved.getDate() + 1);  
+        dayAfterRetrieved.setDate(localStocks.dateRetrieved.getDate() + 1);
         if (dayAfterRetrieved <= currentDate) {
             return false;
         }
-        return true;       
+        return true;
     }
 
     private mapNewStock(result: any, property: string, company: string): GlobalQuote  {

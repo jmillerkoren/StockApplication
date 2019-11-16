@@ -8,7 +8,8 @@ import { ChartComponent } from './shared/chart/chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { StockListComponent } from './stock-list/stock-list.component'
 import { LineChartComponent } from './shared/line-chart/line-chart.component'
-import { HomepageComponent } from './shared/homepage.component'
+import { HomepageComponent } from './shared/homepage.component';
+import { StockPredictionComponent } from './stock-prediction/stock-prediction.component'
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { HomepageComponent } from './shared/homepage.component'
     ChartComponent,
     StockListComponent,
     LineChartComponent,
-    HomepageComponent
+    HomepageComponent,
+    StockPredictionComponent
   ],
   imports: [
     BrowserModule,
