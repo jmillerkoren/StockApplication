@@ -3,13 +3,11 @@ import numpy as np
 from flask import Flask, jsonify, request, Response
 import tensorflow as tf
 
+
 app = Flask(__name__)
 
 
-@app.route('/stock-app/api/v1.0/example', methods=["GET"])
-def example_api():
-    json = {"example": "json"}
-    return jsonify(json)
+model = tf.keras.models.load_model("./1")
 
 
 @app.route('/stock-app/api/v1.0/calculate', methods=["POST"])
@@ -38,21 +36,26 @@ def preprocess_data(path):
     return np.array(stock_price), np.array(dates)
 
 
-@app.route('/stock-app/api/v1.0/predict', methods=["get"])
+@app.route('/stock-app/api/v1.0/predict', methods=["post"])
 def predict_stocks():
+    stock = request.data
     stocks, stock_dates = preprocess_data("./sample-stocks.json")
-    data_mean = stocks.mean()
-    data_std = stocks.std()
-    # stocks = (stocks - data_mean) / data_std
-    model = tf.keras.models.load_model("./1")
+    response = enable_cors()
     temp = [stocks]
     x_prev = np.array(temp)
-    print(model)
     prediction = model.predict(x_prev)
-    # prediction = prediction * data_std + data_mean
-    pred_list = prediction.tolist()
-    json = {"stocks": pred_list}
-    return jsonify(json)
+    pred_list = prediction[0].tolist()
+    pred_dict = {"stocks": pred_list}
+    resp_data = json.dumps(pred_dict)
+    response.data = resp_data
+    return response
+
+
+def enable_cors():
+    response = Response()
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 if __name__ == '__main__':
