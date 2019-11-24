@@ -1,5 +1,2 @@
-# ignore scripts inside venv
-/stock-app-backend/venv/Scripts/
-
-# ignore python libraries and runtime inside venv
-/stock-app-backend/venv/Lib/
+# ignore venv folder
+/stock-app-backend/venv/
