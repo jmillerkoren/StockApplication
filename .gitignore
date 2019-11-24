@@ -1,2 +1,7 @@
 # ignore venv folder
-/stock-app-backend/venv/
+venv/
+
+# Ignore pycache
+__pycache__/
+*.pyc
+*.cfg
