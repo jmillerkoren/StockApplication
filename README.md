@@ -1,2 +1,2 @@
 # StockApplication
-Web application giving stock market information and visualizations.
+Web application giving stock market information, visualizations and predictions.
