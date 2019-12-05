@@ -19,18 +19,16 @@ def calculate():
     return response
 
 
-def preprocess_data(path):
-    file = open(path, "r")
+def preprocess_data(data):
     dates = []
     stock_price = []
     temp = []
-    data = json.load(file)
     for key in data:
         dates.append(key)
-        temp.append(float(data[key]["2. high"]))
-        temp.append(float(data[key]["1. open"]))
-        temp.append(float(data[key]["3. low"]))
-        temp.append(float(data[key]["4. close"]))
+        temp.append(float(key["high"]))
+        temp.append(float(key["open"]))
+        temp.append(float(key["low"]))
+        temp.append(float(key["close"]))
         stock_price.append(temp)
         temp = []
     return np.array(stock_price), np.array(dates)
@@ -39,7 +37,9 @@ def preprocess_data(path):
 @app.route('/stock-app/api/v1.0/predict', methods=["post"])
 def predict_stocks():
     stock = request.data
-    stocks, stock_dates = preprocess_data("./sample-stocks.json")
+    stock = stock.decode('utf-8')
+    json_stocks = json.loads(stock)
+    stocks, stock_dates = preprocess_data(json_stocks)
     response = enable_cors()
     temp = [stocks]
     x_prev = np.array(temp)

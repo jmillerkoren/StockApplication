@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, of } from 'rxjs';
+import {Observable, throwError, of, pipe} from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { GlobalQuote } from './stock';
 import { LocalStocks } from './local-stocks';
@@ -29,6 +29,7 @@ export class StockService {
                     low: result['Global Quote']['04. low'],
                     high: result['Global Quote']['03. high'],
                     volume: result['Global Quote']['06. volume'],
+                    close: 0,
                     latestTradingDay: result['Global Quote']['07. latest trading day'],
                     open: result['Global Quote']['02. open'],
                     change: 0,
@@ -75,7 +76,9 @@ export class StockService {
     }
 
     stockPredictions(stock: GlobalQuote[]): Observable<any> {
-        return this.http.post('http://127.0.0.1:5000/stock-app/api/v1.0/predict', JSON.stringify(stock));
+        return this.http.post('http://127.0.0.1:5000/stock-app/api/v1.0/predict', JSON.stringify(stock)).pipe(
+          tap(result => console.log(result))
+        );
     }
 
     // Look to refactor how local stock/stocks are structured.
@@ -107,6 +110,7 @@ export class StockService {
             open: result[property]["1. open"],
             high: result[property]["2. high"],
             low: result[property]["3. low"],
+            close: result[property]["4. close"],
             price: 0,
             volume: result[property]["5. volume"],
             latestTradingDay: new Date(property),

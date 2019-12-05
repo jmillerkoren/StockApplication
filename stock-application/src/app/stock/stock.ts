@@ -3,6 +3,7 @@ export interface GlobalQuote {
   open: number;
   high: number;
   low: number;
+  close: number;
   price: number;
   volume: number;
   latestTradingDay: Date;

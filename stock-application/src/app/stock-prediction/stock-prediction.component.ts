@@ -9,7 +9,7 @@ import {GlobalQuote} from '../stock/stock';
 })
 export class StockPredictionComponent implements OnInit {
 
-  predictedStocks = [];
+  predictedStocks: number[];
 
   constructor(private stockService: StockService) {
 
@@ -19,7 +19,7 @@ export class StockPredictionComponent implements OnInit {
     // get 14 previous stocks values
     let prevStocks = this.getPrevStocks();
     // call backend to predict, assign to predictedStocks
-    this.stockService.stockPredictions(prevStocks).subscribe({next: result => this.predictedStocks = result})
+    this.stockService.stockPredictions(prevStocks).subscribe({next: result => this.predictedStocks = result.stocks})
   }
 
   private getPrevStocks(): GlobalQuote[] {
@@ -27,7 +27,7 @@ export class StockPredictionComponent implements OnInit {
     this.stockService.getListStocks("MSFT").subscribe({
       next: result => prev = result
     });
-    return prev.slice(0, 14);
+    return prev.slice(0, 17);
   }
 
   ngOnInit() {
